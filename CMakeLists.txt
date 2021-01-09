@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.17)
+project(ShootingRange)
+
+# Include the conan libraries
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
+# Add executable target and link the libraries
+file(GLOB_RECURSE SOURCE "src/*.cpp" "include/*.h")
+add_executable(${PROJECT_NAME} ${SOURCE})
+target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
