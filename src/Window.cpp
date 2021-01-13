@@ -1,0 +1,110 @@
+#include "Window.h"
+#include <fstream>
+#include <chrono>
+#include <thread>
+
+Window::Window() {
+    configHandler.load();
+}
+
+bool Window::initialize() {
+    // Initialize the OpenGL Window
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    window = glfwCreateWindow(Configuration::width, Configuration::height, title, nullptr, nullptr);
+
+    // Check if the window was initialized successfully
+    if (window == nullptr) {
+        std::cout << "Failed to create GLFW window!" << std::endl;
+        glfwTerminate();
+        return false;
+    }
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    if (glfwRawMouseMotionSupported())
+        glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+    glfwSetWindowPos(window, configHandler.config.x, configHandler.config.y);
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, [](GLFWwindow *glfwWindow, int newWidth, int newHeight) {
+        Configuration::width = newWidth;
+        Configuration::height = newHeight;
+        glViewport(0, 0, newWidth, newHeight);
+    });
+
+    // Try to initialize GLAD
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+        std::cout << "Failed to initialize GLAD!" << std::endl;
+        return false;
+    }
+
+    // Add input for changing into grid mode
+    keyInputManager.addKeyEvent(GLFW_KEY_M, [this](int event) {
+        if (event == InputHandler::ON_PRESSED) {
+            wireMode = !wireMode;
+            if (wireMode) {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            } else {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
+        }
+    });
+
+    // Load the shaders and start rendering
+    glEnable(GL_DEPTH_TEST);
+    player.initialize(window);
+    shaderManager.load();
+    cube.load();
+    startGameLoop();
+    return true;
+}
+
+void Window::startGameLoop() {
+    double lastStart = glfwGetTime();
+    while (!glfwWindowShouldClose(window)) {
+        Configuration::deltaTime = glfwGetTime() - lastStart;
+        lastStart = glfwGetTime();
+        update();
+        double end = glfwGetTime() - lastStart;
+        int waitTime = (int) ((configHandler.config.frameTime - end) * 1e6);
+        std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
+    }
+    onExit();
+}
+
+void Window::onExit() {
+    // Save window bounds
+    int xPos, yPos;
+    glfwGetWindowPos(window, &xPos, &yPos);
+    configHandler.saveWindowBounds(xPos, yPos);
+
+    // De-allocate all resources
+    glDeleteProgram(shaderManager.shaderProgram);
+    glfwTerminate();
+}
+
+void Window::update() {
+    // Process input
+    keyInputManager.processInput(window);
+
+    // Draw cubes
+    glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(shaderManager.shaderProgram);
+    player.look();
+    cube.draw(glm::vec3(0, 0, -3));
+    cube.draw(glm::vec3(2, 0, -3));
+    cube.draw(glm::vec3(-2, 0, -3));
+    cube.draw(glm::vec3(0, 0, -6));
+    cube.draw(glm::vec3(2, 0, -6));
+    cube.draw(glm::vec3(-2, 0, -6));
+    cube.draw(glm::vec3(0, 0, -9));
+    cube.draw(glm::vec3(2, 0, -9));
+    cube.draw(glm::vec3(-2, 0, -9));
+    cube.draw(glm::vec3(0, 1, -6));
+
+    // Check and call events and swap the buffers
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
