@@ -10,17 +10,12 @@ namespace Configuration {
     /**
      * The current window width
      */
-    extern int width;
+    extern float width;
 
     /**
      * The current window height
      */
-    extern int height;
-
-    /**
-     * The delta frame time (in seconds)
-     */
-    extern double deltaTime;
+    extern float height;
 
     class Configuration {
 
@@ -29,17 +24,32 @@ namespace Configuration {
         /**
          * The bounds of the window
          */
-        int x = 200, y = 200, width = 1600, height = 800;
+        float x = 200, y = 200, width = 1600, height = 800;
 
         /**
          * The minimum frame time (in seconds)
          */
-        double frameTime = 0.006;
+        float frameTime = 0.006;
 
         /**
          * The mouse sensitivity
          */
-        double mouseSensitivity = 0.5;
+        float mouseSensitivity = 0.5;
+
+        /**
+         * The field of view
+         */
+        float fov = 70.0f;
+
+        /**
+         * The delta frame time (in seconds)
+         */
+        float deltaTime = 0.0;
+
+        /**
+         * True if the console is open
+         */
+        bool consoleOpen = false;
 
     public:
 
@@ -54,7 +64,8 @@ namespace Configuration {
                     cereal::make_nvp("width", width),
                     cereal::make_nvp("height", height),
                     cereal::make_nvp("frameTime", frameTime),
-                    cereal::make_nvp("mouseSensitivity", mouseSensitivity)
+                    cereal::make_nvp("mouseSensitivity", mouseSensitivity),
+                    cereal::make_nvp("fov", fov)
             );
         }
     };
@@ -118,7 +129,7 @@ namespace Configuration {
          * @param x The x position of the window
          * @param y The y position of the window
          */
-        void saveWindowBounds(int x, int y);
+        void saveWindowBounds(float x, float y);
     };
 }
 

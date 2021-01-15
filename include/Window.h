@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <console/Console.h>
 #include "handlers/ConfigurationHandler.h"
 #include "handlers/InputHandler.h"
 #include "handlers/ShaderHandler.h"
@@ -18,11 +19,6 @@ private:
      * The title of the window
      */
     const char* title = "Shooting Range";
-
-    /**
-     * True if OpenGL should render in wire mode
-     */
-    bool wireMode = false;
 
     /**
      * The active window
@@ -43,6 +39,11 @@ private:
      * The shader manager
      */
     Configuration::Handler &configHandler = Configuration::Handler::getInstance();
+
+    /**
+     * The console window
+     */
+    Console console;
 
     /**
      * A simple cube that is drawn

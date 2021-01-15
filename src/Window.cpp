@@ -14,7 +14,7 @@ bool Window::initialize() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    window = glfwCreateWindow(Configuration::width, Configuration::height, title, nullptr, nullptr);
+    window = glfwCreateWindow((int) Configuration::width,(int) Configuration::height, title, nullptr, nullptr);
 
     // Check if the window was initialized successfully
     if (window == nullptr) {
@@ -25,11 +25,11 @@ bool Window::initialize() {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     if (glfwRawMouseMotionSupported())
         glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-    glfwSetWindowPos(window, configHandler.config.x, configHandler.config.y);
+    glfwSetWindowPos(window, (int) configHandler.config.x, (int) configHandler.config.y);
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow *glfwWindow, int newWidth, int newHeight) {
-        Configuration::width = newWidth;
-        Configuration::height = newHeight;
+        Configuration::width = (float) newWidth;
+        Configuration::height = (float) newHeight;
         glViewport(0, 0, newWidth, newHeight);
     });
 
@@ -38,21 +38,10 @@ bool Window::initialize() {
         std::cout << "Failed to initialize GLAD!" << std::endl;
         return false;
     }
-
-    // Add input for changing into grid mode
-    keyInputManager.addKeyEvent(GLFW_KEY_M, [this](int event) {
-        if (event == InputHandler::ON_PRESSED) {
-            wireMode = !wireMode;
-            if (wireMode) {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            } else {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            }
-        }
-    });
+    glEnable(GL_DEPTH_TEST);
 
     // Load the shaders and start rendering
-    glEnable(GL_DEPTH_TEST);
+    console.initialize(window);
     player.initialize(window);
     shaderManager.load();
     cube.load();
@@ -63,7 +52,7 @@ bool Window::initialize() {
 void Window::startGameLoop() {
     double lastStart = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
-        Configuration::deltaTime = glfwGetTime() - lastStart;
+        configHandler.config.deltaTime = (float) (glfwGetTime() - lastStart);
         lastStart = glfwGetTime();
         update();
         double end = glfwGetTime() - lastStart;
@@ -77,7 +66,7 @@ void Window::onExit() {
     // Save window bounds
     int xPos, yPos;
     glfwGetWindowPos(window, &xPos, &yPos);
-    configHandler.saveWindowBounds(xPos, yPos);
+    configHandler.saveWindowBounds((float) xPos, (float) yPos);
 
     // De-allocate all resources
     glDeleteProgram(shaderManager.shaderProgram);
@@ -85,6 +74,7 @@ void Window::onExit() {
 }
 
 void Window::update() {
+
     // Process input
     keyInputManager.processInput(window);
 
@@ -103,6 +93,9 @@ void Window::update() {
     cube.draw(glm::vec3(2, 0, -9));
     cube.draw(glm::vec3(-2, 0, -9));
     cube.draw(glm::vec3(0, 1, -6));
+
+    // Show the console
+    console.draw();
 
     // Check and call events and swap the buffers
     glfwSwapBuffers(window);

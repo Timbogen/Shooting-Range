@@ -96,6 +96,7 @@ void Cube::draw(glm::vec3 position) const {
     // Position the cube
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, position);
+    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     shaderManager.setModel(model);
 
     // Draw the cube

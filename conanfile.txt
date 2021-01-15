@@ -4,6 +4,7 @@ glad/0.1.34
 glm/0.9.9.8
 stb/20200203
 cereal/1.3.0
+imgui/1.79
 
 [generators]
 cmake

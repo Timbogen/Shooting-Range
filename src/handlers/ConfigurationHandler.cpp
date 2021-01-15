@@ -4,12 +4,7 @@
 /**
  * Define the static window bounds variables
  */
-int Configuration::width, Configuration::height;
-
-/**
- * Define the static delta time variable
- */
-double Configuration::deltaTime;
+float Configuration::width, Configuration::height;
 
 void Configuration::Handler::save() const {
     try {
@@ -40,7 +35,7 @@ void Configuration::Handler::load() {
     height = config.height;
 }
 
-void Configuration::Handler::saveWindowBounds(int x, int y) {
+void Configuration::Handler::saveWindowBounds(float x, float y) {
     config.x = x;
     config.y = y;
     config.width = width;
