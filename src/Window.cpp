@@ -43,8 +43,8 @@ bool Window::initialize() {
     // Load the shaders and start rendering
     console.initialize(window);
     player.initialize(window);
-    shaderManager.load();
-    cube.load();
+    shaderHandler.initialize();
+    cubeHandler.initialize();
     startGameLoop();
     return true;
 }
@@ -69,30 +69,21 @@ void Window::onExit() {
     configHandler.saveWindowBounds((float) xPos, (float) yPos);
 
     // De-allocate all resources
-    glDeleteProgram(shaderManager.shaderProgram);
+    glDeleteProgram(shaderHandler.shader);
     glfwTerminate();
 }
 
-void Window::update() {
 
+void Window::update() {
     // Process input
     keyInputManager.processInput(window);
 
-    // Draw cubes
+    // Render the scene
     glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(shaderManager.shaderProgram);
+    glUseProgram(shaderHandler.shader);
     player.look();
-    cube.draw(glm::vec3(0, 0, -3));
-    cube.draw(glm::vec3(2, 0, -3));
-    cube.draw(glm::vec3(-2, 0, -3));
-    cube.draw(glm::vec3(0, 0, -6));
-    cube.draw(glm::vec3(2, 0, -6));
-    cube.draw(glm::vec3(-2, 0, -6));
-    cube.draw(glm::vec3(0, 0, -9));
-    cube.draw(glm::vec3(2, 0, -9));
-    cube.draw(glm::vec3(-2, 0, -9));
-    cube.draw(glm::vec3(0, 1, -6));
+    scene.draw();
 
     // Show the console
     console.draw();

@@ -29,7 +29,7 @@ namespace Configuration {
         /**
          * The minimum frame time (in seconds)
          */
-        float frameTime = 0.006;
+        double frameTime = 0.006;
 
         /**
          * The mouse sensitivity
@@ -42,9 +42,14 @@ namespace Configuration {
         float fov = 70.0f;
 
         /**
+         * True if the fps count should be shown
+         */
+        bool showFPS = true;
+
+        /**
          * The delta frame time (in seconds)
          */
-        float deltaTime = 0.0;
+        float deltaTime = frameTime;
 
         /**
          * True if the console is open
@@ -65,7 +70,8 @@ namespace Configuration {
                     cereal::make_nvp("height", height),
                     cereal::make_nvp("frameTime", frameTime),
                     cereal::make_nvp("mouseSensitivity", mouseSensitivity),
-                    cereal::make_nvp("fov", fov)
+                    cereal::make_nvp("fov", fov),
+                    cereal::make_nvp("showFPS", showFPS)
             );
         }
     };

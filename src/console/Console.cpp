@@ -70,6 +70,20 @@ void Console::draw() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
+    if (configHandler.config.showFPS) {
+        // Get the current fps value
+        recentFPSCount.push_back((int) (1.0f / configHandler.config.deltaTime));
+        if (recentFPSCount.size() > 50) recentFPSCount.pop_front();
+        float fps = 0;
+        for (auto &value : recentFPSCount) fps += (float) value / recentFPSCount.size();
+
+        // Draw the value
+        ImGui::Begin("FPS", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        ImGui::SetWindowSize(ImVec2(100, 40));
+        ImGui::SetWindowPos(ImVec2(4.0f,4.0f));
+        ImGui::Text("%s", std::to_string((int) fps).append(" FPS").c_str());
+    }
+
     // Check if the console has to be drawn and draw crosshair otherwise
     if (!configHandler.config.consoleOpen) {
         ImGui::Begin("Crosshair", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);

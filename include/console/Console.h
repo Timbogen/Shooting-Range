@@ -4,6 +4,7 @@
 #include "handlers/InputHandler.h"
 #include "handlers/ConfigurationHandler.h"
 #include "Interpreter.h"
+#include <queue>
 
 /**
  * True if the command input should not overwrite a new text value
@@ -33,6 +34,11 @@ private:
      * The console log
      */
     std::vector<ConsoleLog> consoleLog;
+
+    /**
+     * The recent fps numbers
+     */
+    std::deque<int> recentFPSCount;
 
     /**
      * The GLFW window

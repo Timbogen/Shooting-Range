@@ -45,37 +45,57 @@ unsigned int loadShader(const char *path, const int &shaderType) {
     return shaderID;
 }
 
-void ShaderHandler::load() {
+/**
+ * Load a shader program
+ * @param fragmentPath The path to the fragment shader
+ * @return The program id
+ */
+unsigned int loadProgram(const char *fragmentPath) {
     // Load the shaders and combine them into one shader program
     unsigned int vertexShader = loadShader("rsc/shaders/vertex.glsl", GL_VERTEX_SHADER);
-    unsigned int fragmentShader = loadShader("rsc/shaders/fragment.glsl", GL_FRAGMENT_SHADER);
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
+    unsigned int fragmentShader = loadShader(fragmentPath, GL_FRAGMENT_SHADER);
+    unsigned int program = glCreateProgram();
+    glAttachShader(program, vertexShader);
+    glAttachShader(program, fragmentShader);
+    glLinkProgram(program);
 
     // Check if the linking was successful
     int success;
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (!success) {
         char infoLog[512];
-        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+        glGetProgramInfoLog(program, 512, nullptr, infoLog);
         std::cout << "WARNING! Linking shaders failed!" << std::endl << infoLog << std::endl;
     }
 
     // Delete the single shaders
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+    return program;
+}
+
+void ShaderHandler::initialize() {
+    shader = loadProgram("rsc/shaders/fragment.glsl");
 }
 
 void ShaderHandler::setCamera(glm::mat4 view, glm::mat4 projection) const {
-    unsigned int viewLoc  = glGetUniformLocation(shaderProgram, "view");
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-    int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &projection[0][0]);
+    glm::mat4 pv = projection * view;
+    unsigned int pvLoc  = glGetUniformLocation(shader, "pv");
+    glUniformMatrix4fv(pvLoc, 1, GL_FALSE, &pv[0][0]);
 }
 
 void ShaderHandler::setModel(glm::mat4 model) const {
-    unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
+    unsigned int modelLoc = glGetUniformLocation(shader, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+}
+
+void ShaderHandler::setTexture(unsigned int texture) {
+    if (currentTexture == texture) return;
+    currentTexture = texture;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+}
+
+void ShaderHandler::setColor(float red, float green, float blue, float alpha) const {
+    glUniform4f(glGetUniformLocation(shader, "cubeColor"), red, green, blue, alpha);
 }

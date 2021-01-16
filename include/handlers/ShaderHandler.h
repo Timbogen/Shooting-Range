@@ -10,7 +10,12 @@ public:
     /**
      * The reference to the shader program
      */
-    unsigned int shaderProgram = 0;
+    unsigned int shader;
+
+    /**
+     * The currently active texture
+     */
+    unsigned int currentTexture = 0;
 
 public:
 
@@ -45,7 +50,7 @@ public:
     /**
      * Load the shaders
      */
-    void load();
+    void initialize();
 
     /**
      * Set the matrices necessary for the camera config (view and projection)
@@ -59,6 +64,21 @@ public:
      * @param model The model matrix
      */
     void setModel(glm::mat4 model) const;
+
+    /**
+     * Change the texture
+     * @param texture The new texture
+     */
+    void setTexture(unsigned int texture);
+
+    /**
+     * Change the color
+     * @param red The red value
+     * @param green The green value
+     * @param blue The blue value
+     * @param alpha The alpha value (opacity)
+     */
+    void setColor(float red, float green, float blue, float alpha) const;
 };
 
 #endif //SHOOTINGRANGE_SHADERHANDLER_H

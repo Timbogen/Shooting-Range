@@ -21,7 +21,8 @@ struct Command {
     /**
      * The commands
      */
-    const static Command SET_FOV, GET_FOV, SET_MOUSE_SPEED, GET_MOUSE_SPEED, SET_WIRE_MODE, HELP;
+    const static Command SET_FOV, GET_FOV, SET_MOUSE_SPEED, GET_MOUSE_SPEED, SET_WIRE_MODE, FPS_DISPLAY, SET_FPS_LIMIT,
+            HELP;
 
     /**
      * The list of commands

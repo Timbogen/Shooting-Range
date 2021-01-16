@@ -20,6 +20,7 @@ std::vector<std::string> splitString(char commandInput[], char split) {
             nextString += commandInput[i];
         }
     }
+    std::transform(nextString.begin(), nextString.end(), nextString.begin(), ::tolower);
     if (!nextString.empty()) strings.push_back(nextString);
     return strings;
 }

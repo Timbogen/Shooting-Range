@@ -8,7 +8,7 @@
 #include "handlers/ConfigurationHandler.h"
 #include "handlers/InputHandler.h"
 #include "handlers/ShaderHandler.h"
-#include "Cube.h"
+#include "game/Scene.h"
 #include "Player.h"
 
 class Window {
@@ -33,7 +33,7 @@ private:
     /**
      * The shader manager
      */
-    ShaderHandler &shaderManager = ShaderHandler::getInstance();
+    ShaderHandler &shaderHandler = ShaderHandler::getInstance();
 
     /**
      * The shader manager
@@ -41,19 +41,24 @@ private:
     Configuration::Handler &configHandler = Configuration::Handler::getInstance();
 
     /**
+     * The cube handler
+     */
+    CubeHandler &cubeHandler = CubeHandler::getInstance();
+
+    /**
      * The console window
      */
     Console console;
 
     /**
-     * A simple cube that is drawn
-     */
-    Cube cube;
-
-    /**
      * The player
      */
     Player player;
+
+    /**
+     * The scene
+     */
+    Scene scene;
 
 public:
 
