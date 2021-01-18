@@ -113,7 +113,7 @@ void CubeHandler::draw(const CubeGroup &group, glm::mat4 parentModel) const {
         draw(cube, parentModel * group.model * cube.model);
     }
     for (auto &childGroup : group.groups) {
-        draw(childGroup, parentModel * group.model);
+        draw(*childGroup, parentModel * group.model);
     }
 }
 

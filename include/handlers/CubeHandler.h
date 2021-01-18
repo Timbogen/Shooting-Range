@@ -63,7 +63,7 @@ public:
     /**
      * The child groups
      */
-    std::vector<CubeGroup> groups;
+    std::vector<std::shared_ptr<CubeGroup>> groups;
 
     /**
      * Constructor
