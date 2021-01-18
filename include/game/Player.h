@@ -6,6 +6,7 @@
 #include "handlers/ShaderHandler.h"
 #include "handlers/InputHandler.h"
 #include "handlers/ConfigurationHandler.h"
+#include "Gun.h"
 
 class Player {
 
@@ -14,17 +15,27 @@ private:
     /**
      * The movement speed
      */
-    constexpr const static double SPEED_FORWARD = 5, SPEED_SIDE = 3;
+    constexpr static float SPEED_MOVING = 5, SPEED_JUMPING = 5;
 
     /**
      * A factor to slow down the mouse speed
      */
-    constexpr const static double MOUSE_SPEED_FACTOR = 0.001;
+    constexpr static float MOUSE_SPEED_FACTOR = 0.001;
+
+    /**
+     * The height of the player
+     */
+    constexpr static float PLAYER_HEIGHT = 2.0f;
+
+    /**
+     * The gun of the player
+     */
+    Gun gun;
 
     /**
      * The position of the player
      */
-    glm::vec3 position{0.0f, 2.0f, -3.0f};
+    glm::vec3 position{0.0f, PLAYER_HEIGHT, 0.0f};
 
     /**
      * The last mouse position
@@ -34,7 +45,17 @@ private:
     /**
      * The angles describing the looking direction of the player
      */
-    double yaw = -90, pitch = 0;
+    float yaw = 0, pitch = 0;
+
+    /**
+     * True if the player is currently jumping
+     */
+    bool inAir = false;
+
+    /**
+     * The jump progress
+     */
+    float jumpProgress = 0;
 
     /**
      * The shader handler
@@ -66,16 +87,21 @@ public:
     /**
      * Move the player
      */
-    void look();
+    void update();
 
 private:
+
+    /**
+     * Make the player jump
+     */
+    void jump();
 
      /**
       * Update the looking direction of the player
       * @param delta_x The delta of the mouse movement on the x axis
       * @param delta_y The delta of the mouse movement on the y axis
       */
-    void updateCamera(double delta_x, double delta_y);
+    void updateCamera(float delta_x, float delta_y);
 
 };
 

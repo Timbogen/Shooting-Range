@@ -82,7 +82,7 @@ void Window::update() {
     glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaderHandler.shader);
-    player.look();
+    player.update();
     scene.draw();
 
     // Show the console

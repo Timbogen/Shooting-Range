@@ -4,6 +4,7 @@
 #include "handlers/ShaderHandler.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <memory>
+#include <vector>
 
 class Cube {
 
@@ -12,26 +13,27 @@ public:
     /**
      * The texture of the cube
      */
-    std::shared_ptr<unsigned int> texture;
+    std::shared_ptr<unsigned int> texture = nullptr;
+
     /**
      * The color of the cube
      */
-    float red, green, blue, alpha;
+    glm::vec4 color{1, 1, 1, 1};
+
     /**
      * The model matrix
      */
     glm::mat4 model;
 
-private:
+    /**
+     * The important view vectors
+     */
+    glm::vec3 position{0, 0, 0}, scale{1, 1, 1};
 
     /**
-     * The important view vector's
+     * The rotation of the object
      */
-    glm::vec3 position, rotation, scale;
-    /**
-     * The rotation angle
-     */
-    float rotationAngle;
+    float yaw = 0.0, pitch = 0.0, roll = 0;
 
 public:
 
@@ -40,39 +42,7 @@ public:
      *
      * @param texture The texture of the cube
      */
-    Cube(std::shared_ptr<unsigned int> texture);
-
-    /**
-     * Set the color of the cube
-     * @param red The red value
-     * @param green The green value
-     * @param blue The blue value
-     * @param alpha The alpha value (opacity)
-     */
-    void setColor(float red, float green, float blue, float alpha);
-
-    /**
-     * Set the position of the cube
-     * @param position The new position vector
-     */
-    void setPosition(float x, float y, float z);
-
-    /**
-     * Set the rotation of the cube
-     * @param rotationAngle The rotation angle (in degrees)
-     * @param rotation The rotation vector
-     */
-    void setRotation(float x, float y, float z, float rotationAngle);
-
-    /**
-     * The scale vector
-     * @param x The x value
-     * @param y The y value
-     * @param z The z value
-     */
-    void setScale(float x, float y, float z);
-
-private:
+    Cube(std::shared_ptr<unsigned int> texture) : texture(texture) {}
 
     /**
      * Update the cubes model matrix
@@ -80,8 +50,27 @@ private:
     void update();
 };
 
-namespace CubeTexture {
-}
+
+class CubeGroup : public Cube {
+
+public:
+
+    /**
+     * The cubes of the cube group (relatively positioned)
+     */
+    std::vector<Cube> cubes;
+
+    /**
+     * The child groups
+     */
+    std::vector<CubeGroup> groups;
+
+    /**
+     * Constructor
+     */
+    CubeGroup() : Cube(nullptr) {}
+};
+
 
 class CubeHandler {
 
@@ -134,12 +123,12 @@ public:
     /**
      * Delete copy-constructor
      */
-    CubeHandler(CubeHandler const&) = delete;
+    CubeHandler(CubeHandler const &) = delete;
 
     /**
      * Delete copy-operator
      */
-    void operator=(CubeHandler const&) = delete;
+    void operator=(CubeHandler const &) = delete;
 
     /**
      * Initialize the cube
@@ -153,6 +142,23 @@ public:
      * @param cube The cube to be drawn
      */
     void draw(const Cube &cube) const;
+
+    /**
+     * Draw a cube group
+     *
+     * @param cubeGroup The group to be drawn
+     * @param parentModel The model matrix of the parent
+     */
+    void draw(const CubeGroup &cubeGroup, glm::mat4 parentModel = glm::mat4{1}) const;
+
+private:
+
+    /**
+     * Draw a cube with a given model matrix
+     * @param cube The cube
+     * @param model The model matrix
+     */
+    void draw(const Cube &cube, glm::mat4 model) const;
 };
 
 #endif //SHOOTINGRANGE_CUBEHANDLER_H

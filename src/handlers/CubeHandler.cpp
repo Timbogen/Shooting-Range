@@ -4,44 +4,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-Cube::Cube(std::shared_ptr<unsigned int> cubeTexture) {
-    setColor(1, 1, 1, 1);
-    texture = cubeTexture;
-    position = glm::vec3(0, 0, 0);
-    scale = glm::vec3(1, 1, 1);
-    setRotation(1, 1, 1, 0);
-}
-
-void Cube::setColor(float newRed, float newGreen, float newBlue, float newAlpha) {
-    red = newRed;
-    green = newGreen;
-    blue = newBlue;
-    alpha = newAlpha;
-}
-
-void Cube::setPosition(float x, float y, float z) {
-    position = glm::vec3(x, y, z);
-    update();
-}
-
-void Cube::setRotation(float x, float y, float z, float newAngle) {
-    rotation = glm::vec3(x, y, z);
-    rotationAngle = newAngle;
-    update();
-}
-
-void Cube::setScale(float x, float y, float z) {
-    scale = glm::vec3(x, y, z);
-    update();
-}
-
 void Cube::update() {
-    model = glm::mat4(1.0f);
+    model = glm::mat4{1.0f};
     model = glm::translate(model, position);
-    model = glm::rotate(model, glm::radians(rotationAngle), rotation);
+    model = glm::rotate(model, yaw, glm::vec3{0, 1, 0});
+    model = glm::rotate(model, pitch, glm::vec3{1, 0, 0});
+    model = glm::rotate(model, roll, glm::vec3{0, 0, 1});
     model = glm::scale(model, scale);
 }
-
 
 /**
  * Load a texture
@@ -135,10 +105,23 @@ void CubeHandler::initialize() {
 }
 
 void CubeHandler::draw(const Cube &cube) const {
+    draw(cube, cube.model);
+}
+
+void CubeHandler::draw(const CubeGroup &group, glm::mat4 parentModel) const {
+    for (auto &cube : group.cubes) {
+        draw(cube, parentModel * group.model * cube.model);
+    }
+    for (auto &childGroup : group.groups) {
+        draw(childGroup, parentModel * group.model);
+    }
+}
+
+void CubeHandler::draw(const Cube &cube, glm::mat4 model) const {
     // Setup color, texture and position for the cube
-    shaderManager.setColor(cube.red, cube.green, cube.blue, cube.alpha);
+    shaderManager.setColor(cube.color[0], cube.color[1], cube.color[2], cube.color[3]);
     shaderManager.setTexture(*cube.texture);
-    shaderManager.setModel(cube.model);
+    shaderManager.setModel(model);
 
     // Draw the cube
     glBindVertexArray(VAO);

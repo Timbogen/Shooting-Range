@@ -1,11 +1,19 @@
 #include "game/Scene.h"
 
 Scene::Scene() {
-    for (int m = -10; m < 10; m++) {
-        for (int n = -10; n < 10; n++) {
-            Cube cube1{cubeHandler.brick};
-            cube1.setPosition((float) m, 0, (float) n);
-            cubes.push_back(cube1);
+    int size = 6;
+    for (int m = -size; m <= size; m++) {
+        for (int n = -size; n <= size; n++) {
+            Cube floor{cubeHandler.brick};
+            floor.position = glm::vec3{(float) m, 0, (float) n};
+            floor.update();
+            cubes.push_back(floor);
+            if (abs(m) == size || abs(n) == size) {
+                Cube wall{cubeHandler.brick};
+                wall.position = glm::vec3{(float) m, 1, (float) n};
+                wall.update();
+                cubes.push_back(wall);
+            }
         }
     }
 }

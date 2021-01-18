@@ -24,7 +24,7 @@ void InputHandler::processInput(GLFWwindow *window) {
     double mouseX, mouseY;
     glfwGetCursorPos(window, &mouseX, &mouseY);
     for (auto const& value : mouseCallbacks) {
-        if (glfwGetKey(window, value.first) == GLFW_PRESS) {
+        if (glfwGetMouseButton(window, value.first) == GLFW_PRESS) {
             // Check if the key was released before
             if (mouseStates[value.first] == RELEASED) {
                 value.second(ON_PRESSED, mouseX, mouseY);

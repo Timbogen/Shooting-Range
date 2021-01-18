@@ -9,7 +9,7 @@
 #include "handlers/InputHandler.h"
 #include "handlers/ShaderHandler.h"
 #include "game/Scene.h"
-#include "Player.h"
+#include "game/Player.h"
 
 class Window {
 
