@@ -76,6 +76,21 @@ void Gun::update(glm::vec3 &newPosition, float newYaw, float newPitch) {
     mutex.unlock();
 }
 
+bool Gun::hasShotEvent() {
+    mutex.lock();
+    bool hasEvent = !shots.empty();
+    mutex.unlock();
+    return hasEvent;
+}
+
+ShotEvent Gun::getShotEvent() {
+    mutex.lock();
+    ShotEvent shotEvent = shots.front();
+    shots.pop_front();
+    mutex.unlock();
+    return shotEvent;
+}
+
 void Gun::shoot() {
     while (shooting) {
         // Make sure that the gun shoots in the right frequency
@@ -89,16 +104,21 @@ void Gun::shoot() {
         // Create the cube object
         glm::vec3 direction{sin(-yaw) * cos(pitch), sin(pitch), cos(-yaw) * cos(pitch)};
         Cube bullet{texture};
-        bullet.position = position;
+        bullet.position = glm::vec3{
+                position.x - 0.15 * cos(-yaw),
+                position.y - 0.15,
+                position.z + 0.15 * sin(-yaw)
+        };
         bullet.color = Bullet::COLOR;
         bullet.scale = Bullet::SCALE;
         bullet.yaw = -yaw;
         bullet.pitch = -pitch;
         bullet.update();
 
-        // Add it to the other bullets
+        // Add it to the other bullets and add a shot event
         mutex.lock();
         bullets.emplace_back(direction, bullet);
+        shots.push_back(ShotEvent{position, direction});
         mutex.unlock();
     }
 }

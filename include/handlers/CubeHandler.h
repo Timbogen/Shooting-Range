@@ -68,7 +68,9 @@ public:
     /**
      * Constructor
      */
-    CubeGroup() : Cube(nullptr) {}
+    CubeGroup() : Cube(nullptr) {
+        update();
+    }
 };
 
 
@@ -79,7 +81,8 @@ public:
     /**
      * The different textures
      */
-    std::shared_ptr<unsigned int> brick = std::make_shared<unsigned int>(0),
+    std::shared_ptr<unsigned int>
+            brick = std::make_shared<unsigned int>(0),
             empty = std::make_shared<unsigned int>(0);
 
 private:

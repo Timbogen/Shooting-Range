@@ -7,6 +7,7 @@
 #include "handlers/InputHandler.h"
 #include "handlers/ConfigurationHandler.h"
 #include "Gun.h"
+#include "Scene.h"
 
 class Player {
 
@@ -72,6 +73,11 @@ private:
      */
     Configuration::Handler &configHandler = Configuration::Handler::getInstance();
 
+    /**
+     * The scene
+     */
+    Scene &scene = Scene::getInstance();
+
 public:
 
     /**
@@ -95,6 +101,11 @@ private:
      * Make the player jump
      */
     void jump();
+
+    /**
+     * Check if the player is in the bounds
+     */
+    void checkBounds();
 
      /**
       * Update the looking direction of the player

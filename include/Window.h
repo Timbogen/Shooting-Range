@@ -58,7 +58,7 @@ private:
     /**
      * The scene
      */
-    Scene scene;
+    Scene &scene = Scene::getInstance();
 
 public:
 

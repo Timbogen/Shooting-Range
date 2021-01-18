@@ -7,21 +7,25 @@ void Player::initialize(GLFWwindow *window) {
         if (configHandler.config.consoleOpen) return;
         position.z += configHandler.config.deltaTime * SPEED_MOVING * cos(yaw);
         position.x -= configHandler.config.deltaTime * SPEED_MOVING * sin(yaw);
+        checkBounds();
     });
     inputHandler.addKeyEvent(GLFW_KEY_S, [this](int event) {
         if (configHandler.config.consoleOpen) return;
         position.z -= configHandler.config.deltaTime * SPEED_MOVING * cos(yaw);
         position.x += configHandler.config.deltaTime * SPEED_MOVING * sin(yaw);
+        checkBounds();
     });
     inputHandler.addKeyEvent(GLFW_KEY_A, [this](int event) {
         if (configHandler.config.consoleOpen) return;
         position.z += configHandler.config.deltaTime * SPEED_MOVING * sin(yaw);
         position.x += configHandler.config.deltaTime * SPEED_MOVING * cos(yaw);
+        checkBounds();
     });
     inputHandler.addKeyEvent(GLFW_KEY_D, [this](int event) {
         if (configHandler.config.consoleOpen) return;
         position.z -= configHandler.config.deltaTime * SPEED_MOVING * sin(yaw);
         position.x -= configHandler.config.deltaTime * SPEED_MOVING * cos(yaw);
+        checkBounds();
     });
     inputHandler.addKeyEvent(GLFW_KEY_SPACE, [this](int event) {
         if (event == InputHandler::ON_PRESSED) inAir = true;
@@ -64,8 +68,9 @@ void Player::update() {
     // Jump if necessary
     jump();
 
-    // Update the gun
+    // Update the gun and check if new shot event are available
     gun.update(position, yaw, pitch);
+    if (gun.hasShotEvent()) scene.checkIntersections(gun.getShotEvent());
 }
 
 void Player::jump() {
@@ -77,6 +82,14 @@ void Player::jump() {
         jumpProgress = 0;
         position.y = PLAYER_HEIGHT;
     }
+}
+
+void Player::checkBounds() {
+    float size = Scene::ROOM_SIZE - 1;
+    position.x = std::max(position.x, -size);
+    position.z = std::max(position.z, -size);
+    position.x = std::min(position.x, size);
+    position.z = std::min(position.z, size);
 }
 
 void Player::updateCamera(float delta_x, float delta_y) {

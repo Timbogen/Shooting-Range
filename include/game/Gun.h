@@ -9,6 +9,18 @@
 #include "handlers/ConfigurationHandler.h"
 #include "handlers/CubeHandler.h"
 
+struct ShotEvent {
+    /**
+     * The start position
+     */
+    glm::vec3 start;
+
+    /**
+     * The direction vector of the bullet
+     */
+    glm::vec3 direction;
+};
+
 struct Bullet {
 
     /**
@@ -19,7 +31,7 @@ struct Bullet {
     /**
      * Velocity of a bullet
      */
-    constexpr static int VELOCITY = 100;
+    constexpr static int VELOCITY = 200;
 
     /**
      * Color of a bullet
@@ -29,7 +41,7 @@ struct Bullet {
     /**
      * Form of a bullet
      */
-    constexpr static glm::vec3 SCALE{0.02, 0.02, 0.08};
+    constexpr static glm::vec3 SCALE{0.03, 0.03, 0.12};
 
     /**
      * Timestamp of cube start
@@ -101,6 +113,11 @@ private:
     std::deque<Bullet> bullets;
 
     /**
+     * The events for the shot bullets
+     */
+    std::deque<ShotEvent> shots;
+
+    /**
      * The actual gun model
      */
     CubeGroup gun;
@@ -139,6 +156,18 @@ public:
      * @param pitch The vertical orientation of the player
      */
     void update(glm::vec3 &position, float yaw, float pitch);
+
+    /**
+     * Check if the gun has another shot event ready
+     * @return True if a shot event is in queue
+     */
+    bool hasShotEvent();
+
+    /**
+     * Get the next shot event
+     * @return The next event
+     */
+    ShotEvent getShotEvent();
 
 private:
 
