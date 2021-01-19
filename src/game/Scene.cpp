@@ -149,16 +149,8 @@ bool Scene::intersects(const Cube &target, const ShotEvent &shotEvent) {
 }
 
 void Scene::checkIntersections(const ShotEvent &shotEvent) {
-    if (intersects(playButton, shotEvent)) {
-        *play->groups[0] = playDisabled;
-        *stop->groups[0] = stopEnabled;
-        game.start();
-    };
-    if (intersects(stopButton, shotEvent)) {
-        *play->groups[0] = playEnabled;
-        *stop->groups[0] = stopDisabled;
-        game.stop();
-    };
+    if (intersects(playButton, shotEvent)) game.start();
+    if (intersects(stopButton, shotEvent)) game.stop();
     for (int i = 0; i < game.targets.size(); i++) {
         if (intersects(game.targets[i].target, shotEvent)) game.onHit(i);
     }
@@ -169,9 +161,6 @@ void Scene::updateDisplay(std::shared_ptr<CubeGroup> valueDisplay[3], int value)
         *valueDisplay[0]->groups[0] = numbers[value / 100];
         *valueDisplay[1]->groups[0] = numbers[(value % 100) / 10];
         *valueDisplay[2]->groups[0] = numbers[value % 10];
-    } else {
-        *play->groups[0] = playEnabled;
-        *stop->groups[0] = stopDisabled;
     }
 }
 
@@ -182,6 +171,13 @@ void Scene::update() {
     // Update the displays
     updateDisplay(score, game.score);
     updateDisplay(time, game.time);
+    if (game.time > 0) {
+        *play->groups[0] = playDisabled;
+        *stop->groups[0] = stopEnabled;
+    } else {
+        *play->groups[0] = playEnabled;
+        *stop->groups[0] = stopDisabled;
+    }
 
     // Draw the room
     cubeHandler.draw(room);

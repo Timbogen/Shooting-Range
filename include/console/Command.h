@@ -22,7 +22,8 @@ struct Command {
      * The commands
      */
     const static Command SET_FOV, GET_FOV, SET_MOUSE_SPEED, GET_MOUSE_SPEED, SET_WIRE_MODE, FPS_DISPLAY, SET_FPS_LIMIT,
-            HELP;
+            SET_TARGET_HEALTH, GET_TARGET_HEALTH, SET_MAX_TARGETS, GET_MAX_TARGETS, SET_TARGET_SPEED, GET_TARGET_SPEED,
+            SET_GAME_DURATION, GET_GAME_DURATION, HELP;
 
     /**
      * The list of commands

@@ -108,6 +108,11 @@ private:
     std::atomic<bool> newTarget{false};
 
     /**
+     * True if the game is currently starting
+     */
+    std::atomic<bool> starting{false};
+
+    /**
      * True if the game is currently running
      */
     std::atomic<bool> running{false};
@@ -174,6 +179,11 @@ private:
      * Start the game
      */
     void startGame();
+
+    /**
+     * The game loop
+     */
+    void gameLoop();
 };
 
 #endif //SHOOTINGRANGE_GAME_H

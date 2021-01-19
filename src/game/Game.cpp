@@ -23,18 +23,19 @@ Cube Target::getCube(float deltaTime) {
 }
 
 void Game::start() {
-    if (running) return;
-    running = true;
+    if (starting || running) return;
+    starting = true;
     score = 0;
     gameDuration = configHandler.config.gameDuration;
     maxTargets = configHandler.config.maxTargets;
     currentTargets = 0;
     targets = std::vector<Target>();
-    std::thread shootingThread(&Game::startGame, this);
-    shootingThread.detach();
+    std::thread gameThread(&Game::startGame, this);
+    gameThread.detach();
 }
 
 void Game::stop() {
+    starting = false;
     running = false;
     time = 0;
 }
@@ -60,7 +61,7 @@ void Game::update() {
 
         // Set the rotation of the target
         int rotation = distributionX(generator);
-        if (rotation % 4 != 0) target.setRotation(configHandler.config.targetSpeed, (float) rotation / MAX_X);
+        if (rotation % 4 != 0) target.setRotation(configHandler.config.targetSpeed, (float) rotation * 2.0f / MAX_X);
 
         // Add the target
         targets.push_back(target);
@@ -73,12 +74,17 @@ void Game::update() {
 void Game::startGame() {
     // The starting countdown
     time = 3;
-    while (time >= 0) {
-        std::this_thread::sleep_for(std::chrono::seconds (1));
-        if (!running) return;
+    while (time > 0) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        if (!starting || running) return;
         time--;
     }
+    running = true;
+    std::thread gameThread(&Game::gameLoop, this);
+    gameThread.detach();
+}
 
+void Game::gameLoop() {
     // The main game loop
     time = 1 * gameDuration;
     while (time >= 0) {

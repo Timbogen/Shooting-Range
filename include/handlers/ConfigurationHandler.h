@@ -47,19 +47,19 @@ namespace Configuration {
         bool showFPS = true;
 
         /**
+         * The duration of one game
+         */
+        int gameDuration = 60;
+
+        /**
          * The health of a target
          */
         int health = 6;
 
         /**
-         * The duration of one game
-         */
-        int gameDuration = 6;
-
-        /**
          * The max amount of targets that are alive at the same time
          */
-        int maxTargets = 3;
+        int maxTargets = 5;
 
         /**
          * The speed of the targets
@@ -92,6 +92,7 @@ namespace Configuration {
                     cereal::make_nvp("mouseSensitivity", mouseSensitivity),
                     cereal::make_nvp("fov", fov),
                     cereal::make_nvp("showFPS", showFPS),
+                    cereal::make_nvp("gameDuration", gameDuration),
                     cereal::make_nvp("health", health),
                     cereal::make_nvp("maxTargets", maxTargets),
                     cereal::make_nvp("targetSpeed", targetSpeed)
