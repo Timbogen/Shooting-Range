@@ -118,6 +118,11 @@ private:
     std::atomic<bool> running{false};
 
     /**
+     * True if the game ended and the targets shall be cleared
+     */
+    std::atomic<bool> clearTargets{false};
+
+    /**
      * The amount of current targets
      */
     std::atomic<int> currentTargets{0};

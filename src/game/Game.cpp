@@ -67,6 +67,8 @@ void Game::update() {
         targets.push_back(target);
         currentTargets = targets.size();
         newTarget = false;
+    } else if (clearTargets) {
+        targets = std::vector<Target>{};
     }
     for (auto &target : targets) cubeHandler.draw(target.getCube(configHandler.config.deltaTime));
 }
@@ -94,4 +96,5 @@ void Game::gameLoop() {
         time--;
     }
     running = false;
+    clearTargets = true;
 }
