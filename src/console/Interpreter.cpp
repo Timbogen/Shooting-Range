@@ -29,7 +29,7 @@ ConsoleLog Interpreter::interpret(char commandInput[]) {
     // Check if the command is known and execute if it's the case
     std::vector<std::string> commands = splitString(commandInput, ' ');
     for (auto &command : Command::commands) {
-        if (commands[0]._Equal(command.name)) {
+        if (commands[0] == command.name) {
             return command.execute(commands, configHandler);
         }
     }
@@ -48,9 +48,9 @@ std::vector<std::string> Interpreter::getCandidates(char commandInput[]) {
 
     // Search for matching commands
     std::vector<std::string> result;
-    if (command._Equal("")) return result;
+    if (command.empty()) return result;
     for (auto &candidate : Command::commands) {
-        if (candidate.name.find(command) != std::string::npos && !candidate.name._Equal(command)) {
+        if (candidate.name.find(command) != std::string::npos && candidate.name != command) {
             result.push_back(candidate.name);
         }
     }

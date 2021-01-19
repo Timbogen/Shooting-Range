@@ -28,6 +28,7 @@ void Player::initialize(GLFWwindow *window) {
         checkBounds();
     });
     inputHandler.addKeyEvent(GLFW_KEY_SPACE, [this](int event) {
+        if (configHandler.config.consoleOpen) return;
         if (event == InputHandler::ON_PRESSED) inAir = true;
     });
 

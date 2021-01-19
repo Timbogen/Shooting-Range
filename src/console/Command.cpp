@@ -87,15 +87,15 @@ const Command Command::GET_MOUSE_SPEED = Command(
 /**
  * Command to set the wire mode
  */
-const Command Command::SET_WIRE_MODE = Command(
-        "set_wire_mode",
+const Command Command::WIRE_MODE = Command(
+        "wire_mode",
         [](std::vector<std::string> &args, Configuration::Handler &handler) -> ConsoleLog {
             try {
                 if (args.size() > 1) {
-                    if (args[1]._Equal("on")) {
+                    if (args[1] == "on") {
                         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                         return ConsoleLog{false, std::vector<std::string>{"Wire mode was turned on."}};
-                    } else if (args[1]._Equal("off")) {
+                    } else if (args[1] == "off") {
                         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
                         return ConsoleLog{false, std::vector<std::string>{"Wire mode was turned off."}};
                     }
@@ -103,7 +103,7 @@ const Command Command::SET_WIRE_MODE = Command(
             } catch (std::exception const &e) {}
             return ConsoleLog{true, std::vector<std::string>{
                     "ERROR! The wire mode has two states: on or off",
-                    "Example: set_wire_mode on"
+                    "Example: wire_mode on"
             }};
         }
 );
@@ -116,11 +116,11 @@ const Command Command::FPS_DISPLAY = Command(
         [](std::vector<std::string> &args, Configuration::Handler &handler) -> ConsoleLog {
             try {
                 if (args.size() > 1) {
-                    if (args[1]._Equal("on")) {
+                    if (args[1] == "on") {
                         handler.config.showFPS = true;
                         handler.save();
                         return ConsoleLog{false, std::vector<std::string>{"FPS display was turned on."}};
-                    } else if (args[1]._Equal("off")) {
+                    } else if (args[1] == "off") {
                         handler.config.showFPS = false;
                         handler.save();
                         return ConsoleLog{false, std::vector<std::string>{"FPS display was turned off."}};
@@ -339,7 +339,7 @@ const Command Command::HELP = Command(
                             .append(Command::GET_MOUSE_SPEED.name)
                             .append(" - Get the player's mouse sensitivity"),
                     std::string("\t")
-                            .append(Command::SET_WIRE_MODE.name)
+                            .append(Command::WIRE_MODE.name)
                             .append(" - Render the scene in wire mode"),
                     std::string("\t")
                             .append(Command::FPS_DISPLAY.name)

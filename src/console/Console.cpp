@@ -39,7 +39,7 @@ void Console::initialize(GLFWwindow *glfwWindow) {
     inputHandler.addKeyEvent(GLFW_KEY_ENTER, [this](int event) {
         if (event == InputHandler::ON_PRESSED) {
             if (selected >= 0) {
-                if (candidates.size() > selected) strcpy_s(input, candidates[selected].append(" ").c_str());
+                if (candidates.size() > selected) strcpy(input, candidates[selected].append(" ").c_str());
                 selected = -1;
             } else if (strlen(input) != 0) {
                 consoleLog.push_back(interpreter.interpret(input));
@@ -134,10 +134,10 @@ void Console::drawConsole() {
     );
 
     // Check if the value actually changed
-    bool equalValue = inputCopy._Equal(input);
+    bool equalValue = inputCopy == input;
     if (maintainValue) {
         if (equalValue) maintainValue = false;
-        strcpy_s(input, inputCopy.c_str());
+        strcpy(input, inputCopy.c_str());
     }
     if (!equalValue) {
         if (std::string{input}.empty()) selected = -1;
