@@ -41,7 +41,7 @@ private:
     Configuration::Handler &configHandler = Configuration::Handler::getInstance();
 
     /**
-     * The cube handler
+     * The cubeHandler handler
      */
     CubeHandler &cubeHandler = CubeHandler::getInstance();
 

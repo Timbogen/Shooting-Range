@@ -58,7 +58,7 @@ void Gun::update(glm::vec3 &newPosition, float newYaw, float newPitch) {
     gun.position = position;
     gun.update();
 
-    // Rotate the front of the barrel and draw the gun
+    // Rotate the front of the barrel and update the gun
     if (shooting) gun.cubes[0].roll += configHandler.config.deltaTime * 10.0f;
     else gun.cubes[0].roll = 0;
     gun.cubes[0].update();
@@ -101,7 +101,7 @@ void Gun::shoot() {
         // Check if the shooting already got cancelled
         if (!shooting) return;
 
-        // Create the cube object
+        // Create the cubeHandler object
         glm::vec3 direction{sin(-yaw) * cos(pitch), sin(pitch), cos(-yaw) * cos(pitch)};
         Cube bullet{texture};
         bullet.position = glm::vec3{

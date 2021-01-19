@@ -83,7 +83,7 @@ void Window::update() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaderHandler.shader);
     player.update();
-    scene.draw();
+    scene.update();
 
     // Show the console
     console.draw();

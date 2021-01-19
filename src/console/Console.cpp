@@ -84,7 +84,7 @@ void Console::draw() {
         ImGui::Text("%s", std::to_string((int) fps).append(" FPS").c_str());
     }
 
-    // Check if the console has to be drawn and draw crosshair otherwise
+    // Check if the console has to be drawn and update crosshair otherwise
     if (!configHandler.config.consoleOpen) {
         ImGui::Begin("Crosshair", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
         ImGui::SetWindowSize(ImVec2(40, 40));

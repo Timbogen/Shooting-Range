@@ -81,7 +81,7 @@ Scene::Scene() {
     playDisabled = createGroup<15, 15>(playBricks, 0.1f);
     playDisabled.yaw = glm::pi<float>();
     playDisabled.update();
-    stopEnabled = createGroup<15, 15>(stopBricks, 0.1f, glm::vec4{0, 1, 0, 1});
+    stopEnabled = createGroup<15, 15>(stopBricks, 0.1f, glm::vec4{1, 0, 0, 1});
     stopDisabled = createGroup<15, 15>(stopBricks, 0.1f);
 
     // Create the display
@@ -149,17 +149,40 @@ bool Scene::intersects(const Cube &target, const ShotEvent &shotEvent) {
 }
 
 void Scene::checkIntersections(const ShotEvent &shotEvent) {
-    if (intersects(playButton, shotEvent)) std::cout << "Play" << std::endl;
-    if (intersects(stopButton, shotEvent)) std::cout << "Stop" << std::endl;
+    if (intersects(playButton, shotEvent)) {
+        *play->groups[0] = playDisabled;
+        *stop->groups[0] = stopEnabled;
+        game.start();
+    };
+    if (intersects(stopButton, shotEvent)) {
+        *play->groups[0] = playEnabled;
+        *stop->groups[0] = stopDisabled;
+        game.stop();
+    };
+    for (int i = 0; i < game.targets.size(); i++) {
+        if (intersects(game.targets[i].target, shotEvent)) game.onHit(i);
+    }
 }
 
 void Scene::updateDisplay(std::shared_ptr<CubeGroup> valueDisplay[3], int value) {
-    *valueDisplay[0]->groups[0] = numbers[(int) (value / 100)];
-    *valueDisplay[1]->groups[0] = numbers[(int) ((value % 100) / 10)];
-    *valueDisplay[2]->groups[0] = numbers[value % 10];
+    if (value >= 0) {
+        *valueDisplay[0]->groups[0] = numbers[value / 100];
+        *valueDisplay[1]->groups[0] = numbers[(value % 100) / 10];
+        *valueDisplay[2]->groups[0] = numbers[value % 10];
+    } else {
+        *play->groups[0] = playEnabled;
+        *stop->groups[0] = stopDisabled;
+    }
 }
 
-void Scene::draw() {
+void Scene::update() {
+    // Update the game
+    game.update();
+
+    // Update the displays
+    updateDisplay(score, game.score);
+    updateDisplay(time, game.time);
+
     // Draw the room
     cubeHandler.draw(room);
     cubeHandler.draw(display);

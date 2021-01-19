@@ -11,12 +11,12 @@ class Cube {
 public:
 
     /**
-     * The texture of the cube
+     * The texture of the cubeHandler
      */
     std::shared_ptr<unsigned int> texture = nullptr;
 
     /**
-     * The color of the cube
+     * The color of the cubeHandler
      */
     glm::vec4 color{1, 1, 1, 1};
 
@@ -40,7 +40,7 @@ public:
     /**
      * Constructor
      *
-     * @param texture The texture of the cube
+     * @param texture The texture of the cubeHandler
      */
     Cube(std::shared_ptr<unsigned int> texture) : texture(texture) {}
 
@@ -56,7 +56,7 @@ class CubeGroup : public Cube {
 public:
 
     /**
-     * The cubes of the cube group (relatively positioned)
+     * The cubes of the cubeHandler group (relatively positioned)
      */
     std::vector<Cube> cubes;
 
@@ -134,20 +134,20 @@ public:
     void operator=(CubeHandler const &) = delete;
 
     /**
-     * Initialize the cube
+     * Initialize the cubeHandler
      * @param shader The reference to the vertex shader
      */
     void initialize();
 
     /**
-     * Draw a cube
+     * Draw a cubeHandler
      *
-     * @param cube The cube to be drawn
+     * @param cube The cubeHandler to be drawn
      */
     void draw(const Cube &cube) const;
 
     /**
-     * Draw a cube group
+     * Draw a cubeHandler group
      *
      * @param cubeGroup The group to be drawn
      * @param parentModel The model matrix of the parent
@@ -157,8 +157,8 @@ public:
 private:
 
     /**
-     * Draw a cube with a given model matrix
-     * @param cube The cube
+     * Draw a cubeHandler with a given model matrix
+     * @param cube The cubeHandler
      * @param model The model matrix
      */
     void draw(const Cube &cube, glm::mat4 model) const;

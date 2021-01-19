@@ -44,24 +44,24 @@ struct Bullet {
     constexpr static glm::vec3 SCALE{0.03, 0.03, 0.12};
 
     /**
-     * Timestamp of cube start
+     * Timestamp of cubeHandler start
      */
     double timestamp;
 
     /**
-     * The direction vector of the cube
+     * The direction vector of the cubeHandler
      */
     glm::vec3 direction;
 
     /**
-     * The bullet cube itself
+     * The bullet cubeHandler itself
      */
     Cube cube;
 
     /**
      * Constructor
-     * @param direction The direction vector of the cube
-     * @param cube The bullet cube itself
+     * @param direction The direction vector of the cubeHandler
+     * @param cube The bullet cubeHandler itself
      */
     Bullet(glm::vec3 &direction, Cube &cube) : direction(direction), cube(cube), timestamp(glfwGetTime()) {}
 };
@@ -71,14 +71,14 @@ class Gun {
 private:
 
     /**
-     * The delay after shooting a cube
+     * The delay after shooting a cubeHandler
      */
     constexpr static double shootDelay = 0.1;
 
     /**
      * True if the gun should keep shooting
      */
-    bool shooting = false;
+    std::atomic<bool> shooting{false};
 
     /**
      * The time of the last shot
@@ -123,7 +123,7 @@ private:
     CubeGroup gun;
 
     /**
-     * The cube handler
+     * The cubeHandler handler
      */
     CubeHandler &cubeHandler = CubeHandler::getInstance();
 
@@ -150,7 +150,7 @@ public:
     void stopShooting();
 
     /**
-     * Update and draw the gun
+     * Update and update the gun
      * @param position The current position of the player
      * @param yaw The horizontal orientation of the player
      * @param pitch The vertical orientation of the player

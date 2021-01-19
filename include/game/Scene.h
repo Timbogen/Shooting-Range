@@ -4,6 +4,7 @@
 #include <vector>
 #include "handlers/CubeHandler.h"
 #include "game/Gun.h"
+#include "game/Game.h"
 
 class Scene {
 
@@ -290,7 +291,7 @@ private:
     };
 
     /**
-     * The cube handler
+     * The cubeHandler handler
      */
     CubeHandler &cubeHandler = CubeHandler::getInstance();
 
@@ -308,6 +309,11 @@ private:
      * The display group
      */
     CubeGroup display;
+
+    /**
+     * The game object
+     */
+    Game game;
 
     /**
      * The positions for the buttons
@@ -373,7 +379,7 @@ public:
     /**
      * Draw the scene
      */
-    void draw();
+    void update();
 
 private:
 
@@ -383,7 +389,7 @@ private:
      * @param shotEvent The shot event
      * @return True if the target intersects
      */
-    bool intersects(const Cube &target, const ShotEvent &shotEvent);
+    static bool intersects(const Cube &target, const ShotEvent &shotEvent);
 
     /**
      * Update a given display with a certain value

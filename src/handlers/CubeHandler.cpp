@@ -118,12 +118,12 @@ void CubeHandler::draw(const CubeGroup &group, glm::mat4 parentModel) const {
 }
 
 void CubeHandler::draw(const Cube &cube, glm::mat4 model) const {
-    // Setup color, texture and position for the cube
+    // Setup color, texture and position for the cubeHandler
     shaderManager.setColor(cube.color[0], cube.color[1], cube.color[2], cube.color[3]);
     shaderManager.setTexture(*cube.texture);
     shaderManager.setModel(model);
 
-    // Draw the cube
+    // Draw the cubeHandler
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     glDrawArrays(GL_TRIANGLES, 0, 36);
