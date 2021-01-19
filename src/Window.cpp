@@ -39,6 +39,7 @@ bool Window::initialize() {
         return false;
     }
     glEnable(GL_DEPTH_TEST);
+    glfwSwapInterval(0);
 
     // Load the shaders and start rendering
     console.initialize(window);

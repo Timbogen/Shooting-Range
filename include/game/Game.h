@@ -4,6 +4,7 @@
 #include "handlers/ConfigurationHandler.h"
 #include "handlers/CubeHandler.h"
 #include <random>
+#include <atomic>
 
 class Target {
 

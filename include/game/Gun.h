@@ -6,6 +6,7 @@
 #include <deque>
 #include <thread>
 #include <mutex>
+#include <atomic>
 #include "handlers/ConfigurationHandler.h"
 #include "handlers/CubeHandler.h"
 

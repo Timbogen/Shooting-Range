@@ -29,3 +29,7 @@ some of the dependencies listed in the *conanfile.txt* aren't available for GCC 
   Shooting-Range> cd cmake-build-debug
   Shooting-Range\cmake-build-debug> conan install ..
   ```
+  Optional to build GFLW from source (Conan doesn't provide binaries for some compilers):
+  ```
+  Shooting-Range\cmake-build-debug> conan install --build=glfw ..
+  ```
